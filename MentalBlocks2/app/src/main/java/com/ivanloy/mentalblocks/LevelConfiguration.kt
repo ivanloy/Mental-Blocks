@@ -5,7 +5,8 @@ class LevelConfiguration(
 ) {
     var maxMoves : Int = 1
     var proportions : FloatArray = floatArrayOf(1f, 1f, 1f)
-
+    var blocks : Array<Block> = Array(36) { Block() }
+    //TODO Refactor, UP is pieces, DOWN is colors, join both
     fun getBlockArray() : Array<Block>{
         var ret : Array<Block> = Array(36){ Block() }
         for(square in squares){
