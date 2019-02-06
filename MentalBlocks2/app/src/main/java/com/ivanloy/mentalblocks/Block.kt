@@ -1,11 +1,11 @@
 package com.ivanloy.mentalblocks
 
 class Block(
-    var elements : IntArray = intArrayOf(0,0,0)
+    var elements : IntArray = intArrayOf(0,0,0) //MAX of a color in block
 ){
 
     var points : Int = 0
-    var piece : PieceType = PieceType.EMPTY
+    var piece : Elements = Elements.EMPTY
 
     fun getColor() : Int {
         var ret : Int = BlockColors.EMPTY_BLOCK.intCode

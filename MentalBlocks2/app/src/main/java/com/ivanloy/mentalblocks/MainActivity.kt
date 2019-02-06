@@ -50,7 +50,15 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        brd_blockBoard.setBlockData(blocks)
+        var squares = arrayOf(
+            Square(0, 0, 3, 3, Elements.FOREST),
+            Square(4, 0, 5, 3, Elements.WATER),
+            Square(0, 4, 2, 5 , Elements.FIRE)
+        )
+
+        var levelConf = LevelConfiguration(squares)
+
+        brd_blockBoard.setBlockData(levelConf.getBlockArray())
 
     }
 }

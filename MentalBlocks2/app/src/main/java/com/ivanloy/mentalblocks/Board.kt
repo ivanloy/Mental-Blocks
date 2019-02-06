@@ -45,7 +45,7 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
             for (i in 0..5){
                 for(j in 0..5){
-                    mBlockPaint.color = blockColors[6*j + i] //TODO Hardcoded
+                    mBlockPaint.color = blockColors[i + j * 6] //TODO Hardcoded
                     drawRect(
                         i * (blockSize).toFloat(),
                         j * (blockSize).toFloat(),
