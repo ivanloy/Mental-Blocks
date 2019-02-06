@@ -6,6 +6,8 @@
 
 
     <color name="background">#f5f5f5</color>
+    <color name="darkGray">#37474F</color>
+    <color name="lightGray">#EEEEEE</color>
 
     <color name="emptyBlock">#BDBDBD</color>
     <color name="blue">#90CAF9</color>

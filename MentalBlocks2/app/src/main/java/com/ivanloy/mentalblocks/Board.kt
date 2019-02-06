@@ -37,7 +37,7 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     }
 
     private var mShadowPaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFF212121.toInt()
+        color = 0xFF37474F.toInt() //TODO colors
     }
 
     init {
@@ -113,7 +113,7 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
                         (j + 1) * (blockSize).toFloat() - BLOCK_SPACING + BLOCK_SHADOW_DY,
                         mShadowPaint
                     )
-                    pieceDrawables.draw(canvas)
+                    //pieceDrawables.draw(canvas)
                 }
             }
 

@@ -3,12 +3,18 @@ package com.ivanloy.mentalblocks
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BoardListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_main)
 
         var squares = arrayOf(
@@ -23,7 +29,7 @@ class MainActivity : AppCompatActivity(), BoardListener{
         var levelConf = LevelConfiguration(squares)
         brd_blockBoard.setBoardListener(this) //TODO Builder?
         brd_blockBoard.setLevelConfiguration(levelConf)
-        brd_blockBoard.pieceDrawables = resources.getDrawable(R.drawable.fore, null)
+        //brd_blockBoard.pieceDrawables = resources.getDrawable(R.drawable.fore, null)
 
     }
 
