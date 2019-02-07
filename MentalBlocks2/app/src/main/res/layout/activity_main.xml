@@ -74,7 +74,7 @@
     <TextView
             android:layout_width="70dp"
             android:layout_height="97dp"
-            android:text="1/4"
+            android:text=""
             android:textSize="27sp"
             android:textColor="@color/lightGray"
             android:textStyle="bold|italic"
@@ -96,7 +96,7 @@
     <TextView
             android:layout_width="70dp"
             android:layout_height="97dp"
-            android:text="1/1"
+            android:text=""
             android:textSize="27sp"
             android:textColor="@color/lightGray"
             android:textStyle="bold|italic"
@@ -120,7 +120,7 @@
     <TextView
             android:layout_width="70dp"
             android:layout_height="97dp"
-            android:text="1/2"
+            android:text=""
             android:textSize="27sp"
             android:textColor="@color/lightGray"
             android:textStyle="bold|italic"
@@ -141,7 +141,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_select_red" android:layout_marginTop="6dp"
             app:layout_constraintTop_toTopOf="@+id/tv_select_red"/>
     <TextView
-            android:text="0 / 14"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_score"
