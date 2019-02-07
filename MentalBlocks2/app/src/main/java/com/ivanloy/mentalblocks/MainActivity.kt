@@ -1,13 +1,15 @@
 package com.ivanloy.mentalblocks
 
+import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), BoardListener{
+class MainActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +18,12 @@ class MainActivity : AppCompatActivity(), BoardListener{
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_main)
+
+        btn_select_blue.setOnClickListener(this)
+        btn_select_green.setOnClickListener(this)
+        btn_select_red.setOnClickListener(this)
+
+        tv_score.text = TextUtil.fromHtml("<b><big>0</big></b> / <small>14</small>")
 
         var squares = arrayOf(
             Square(0, 0, 3, 3, Elements.FOREST),
@@ -30,11 +38,26 @@ class MainActivity : AppCompatActivity(), BoardListener{
         brd_blockBoard.setBoardListener(this) //TODO Builder?
         brd_blockBoard.setLevelConfiguration(levelConf)
         //brd_blockBoard.pieceDrawables = resources.getDrawable(R.drawable.fore, null)
-
     }
 
     override fun onBlockClicked(newScore: Int) {
         Log.d("BlockClicked", newScore.toString())
+        val targetScore = 14
+        tv_score.text = TextUtil.fromHtml("<b><big>$newScore</big></b> / <small>$targetScore</small>")
+    }
+
+    override fun onClick(v: View?) {
+
+        btn_select_blue.background = getDrawable(R.color.coverWhiteAlpha)
+        btn_select_green.background = getDrawable(R.color.coverWhiteAlpha)
+        btn_select_red.background = getDrawable(R.color.coverWhiteAlpha)
+        v!!.background = getDrawable(R.color.invisible)
+
+        when(v!!.id){
+            R.id.btn_select_blue -> brd_blockBoard.pieceSelected = Elements.WATER
+            R.id.btn_select_red -> brd_blockBoard.pieceSelected = Elements.FIRE
+            R.id.btn_select_green -> brd_blockBoard.pieceSelected = Elements.FOREST
+        }
     }
 
 }

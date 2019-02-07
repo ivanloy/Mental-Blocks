@@ -12,8 +12,11 @@ import android.R.attr.right
 import android.R.attr.top
 import android.R.attr.left
 import android.R
+import android.graphics.Color
 import android.graphics.drawable.Drawable
-
+import android.graphics.Shader.TileMode
+import android.graphics.RadialGradient
+import java.util.*
 
 
 class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
@@ -24,10 +27,14 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
     private val BLOCK_SPACING = 12
     private val BLOCK_SHADOW_DY = 6
+    private val PIECE_SHADOW_DX = 7
+    private val PIECE_SHADOW_DY = 7
+    private val PIECE_SIZE_DIV = 3.5
+    private val PIECE_STROKE_WIDTH = 8f
 
     var blockSize = 0
     var score = 0
-    var pieceDrawables : Drawable = resources.getDrawable(R.drawable.alert_dark_frame, null) //TODO Por poner algo?
+    var pieceSelected = Elements.EMPTY
 
     private var levelConfiguration = LevelConfiguration()
     private var blockColors = IntArray(36) //TODO Hardcoded var
@@ -40,11 +47,20 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         color = 0xFF37474F.toInt() //TODO colors
     }
 
+    private var mPiecePaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = BlockColors.BLUE.intCode //TODO colors
+    }
+
+    private var mPieceBorderPaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = 0xFF37474F.toInt() //TODO colors
+        strokeWidth = PIECE_STROKE_WIDTH
+        style = Paint.Style.STROKE
+    }
+
     init {
         for(i in 0..35){
             blockColors[i] = BlockColors.EMPTY_BLOCK.intCode //TODO Hardcoded
         }
-        pieceDrawables.setBounds(0,0,50,50)
     }
 
     fun setBoardListener(listener: BoardListener){
@@ -72,17 +88,18 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     fun setPieceType(blockX : Int, blockY : Int){
         var block = levelConfiguration.blocks[blockX + blockY*6]
         if(block.piece == Elements.EMPTY) {
-            block.piece = Elements.FOREST
+            block.piece = pieceSelected
         }else{
             block.piece = Elements.EMPTY
         }
+        invalidate()
     }
 
     fun updateScore(blockX: Int, blockY: Int){
         var block = levelConfiguration.blocks[blockX + blockY*6]
         for(square in levelConfiguration.squares){
             if(blockX >= square.xTop && blockX <= square.xBot && blockY >= square.yTop && blockY <= square.yBot) {
-                if(block.piece == Elements.FOREST) score++ //TODO Sacar calculo de block fuera, optimizacion
+                if(block.piece != Elements.EMPTY) score++ //TODO Sacar calculo de block fuera, optimizacion
                 else score--
             }
         }
@@ -113,7 +130,32 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
                         (j + 1) * (blockSize).toFloat() - BLOCK_SPACING + BLOCK_SHADOW_DY,
                         mShadowPaint
                     )
-                    //pieceDrawables.draw(canvas)
+
+                    if(levelConfiguration.blocks[i + j*6].piece != Elements.EMPTY) {
+
+                        mPiecePaint.color = levelConfiguration.blocks[i + j * 6].piece.intCode
+
+                        drawCircle(
+                            i * blockSize.toFloat() + PIECE_SHADOW_DX + (blockSize - BLOCK_SPACING) / 2,
+                            j * blockSize.toFloat() + PIECE_SHADOW_DY + (blockSize - BLOCK_SPACING) / 2,
+                            blockSize / PIECE_SIZE_DIV.toFloat(),
+                            mShadowPaint
+                        )
+
+                        drawCircle(
+                            i * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2,
+                            j * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2,
+                            blockSize / PIECE_SIZE_DIV.toFloat(),
+                            mPiecePaint
+                        )
+
+                        drawCircle(
+                            i * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2, //TODO APELO QUE FEO
+                            j * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2,
+                            blockSize / PIECE_SIZE_DIV.toFloat(),
+                            mPieceBorderPaint
+                        )
+                    }
                 }
             }
 
