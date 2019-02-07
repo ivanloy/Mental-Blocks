@@ -1,6 +1,5 @@
 package com.ivanloy.mentalblocks
 
-import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -34,16 +33,16 @@ class MainActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
             Square(1, 1, 2, 2, Elements.FOREST)
         )
 
-        var levelConf = LevelConfiguration(squares)
+        var levelConf = LevelInfo(squares)
         brd_blockBoard.setBoardListener(this) //TODO Builder?
         brd_blockBoard.setLevelConfiguration(levelConf)
         //brd_blockBoard.pieceDrawables = resources.getDrawable(R.drawable.fore, null)
     }
 
-    override fun onBlockClicked(newScore: Int) {
-        Log.d("BlockClicked", newScore.toString())
+    override fun onBlockClicked(levelInfo: LevelInfo) {
         val targetScore = 14
-        tv_score.text = TextUtil.fromHtml("<b><big>$newScore</big></b> / <small>$targetScore</small>")
+        tv_score.text = TextUtil.fromHtml("<b><big>${levelInfo.score}</big></b> / <small>$targetScore</small>")
+        tv_movesLeft.text = "${levelInfo.movesLeft} moves"
     }
 
     override fun onClick(v: View?) {

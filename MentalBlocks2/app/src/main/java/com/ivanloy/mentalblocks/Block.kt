@@ -6,6 +6,7 @@ class Block(
 
     var points : Int = 0
     var piece : Elements = Elements.EMPTY
+    var score : Int = 0
 
     fun getColor() : Int {
         var ret : Int = BlockColors.EMPTY_BLOCK.intCode
