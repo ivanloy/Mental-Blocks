@@ -4,25 +4,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.R.attr.bottom
-import android.R.attr.right
-import android.R.attr.top
-import android.R.attr.left
-import android.R
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.Shader.TileMode
-import android.graphics.RadialGradient
-import java.util.*
 
 
 class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
     private var listener : BoardListener = object : BoardListener{
-        override fun onBlockClicked(newScore: Int) {}
+        override fun onBlockClicked(levelInfo: LevelInfo) {}
     }
 
     private val BLOCK_SPACING = 12
@@ -33,10 +22,9 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     private val PIECE_STROKE_WIDTH = 8f
 
     var blockSize = 0
-    var score = 0
     var pieceSelected = Elements.EMPTY
 
-    private var levelConfiguration = LevelConfiguration()
+    private var levelInfo = LevelInfo()
     private var blockColors = IntArray(36) //TODO Hardcoded var
 
     private var mBlockPaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -67,9 +55,9 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         this.listener = listener
     }
 
-    fun setLevelConfiguration(levelConfiguration: LevelConfiguration){
-        this.levelConfiguration = levelConfiguration
-        setBlockColors(levelConfiguration.getBlockArray())
+    fun setLevelConfiguration(levelInfo: LevelInfo){
+        this.levelInfo = levelInfo
+        setBlockColors(levelInfo.getBlockArray())
     }
 
     fun setBlockColors(blocks : Array<Block>){
@@ -82,27 +70,61 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     fun handleClick(blockX : Int, blockY : Int){
         setPieceType(blockX, blockY)
         updateScore(blockX, blockY)
-        listener.onBlockClicked(score)
+        listener.onBlockClicked(levelInfo)
     }
 
     fun setPieceType(blockX : Int, blockY : Int){
-        var block = levelConfiguration.blocks[blockX + blockY*6]
-        if(block.piece == Elements.EMPTY) {
+        var block = levelInfo.blocks[blockX + blockY*6]
+        if(pieceSelected != Elements.EMPTY && levelInfo.movesLeft > 0 && block.piece == Elements.EMPTY) {
             block.piece = pieceSelected
-        }else{
+            levelInfo.movesLeft--
+        }else if(pieceSelected != Elements.EMPTY && block.piece != Elements.EMPTY){
             block.piece = Elements.EMPTY
+            levelInfo.movesLeft++
         }
         invalidate()
     }
 
     fun updateScore(blockX: Int, blockY: Int){
-        var block = levelConfiguration.blocks[blockX + blockY*6]
-        for(square in levelConfiguration.squares){
-            if(blockX >= square.xTop && blockX <= square.xBot && blockY >= square.yTop && blockY <= square.yBot) {
-                if(block.piece != Elements.EMPTY) score++ //TODO Sacar calculo de block fuera, optimizacion
-                else score--
+        var block = levelInfo.blocks[blockX + blockY*6]
+        if(block.piece != Elements.EMPTY) {
+            addScore(blockX, blockY, block)
+        }else {
+            levelInfo.score -= block.score
+            block.score = 0 //TODO Att in block obj
+        }
+    }
+
+    private fun addScore(blockX: Int, blockY: Int , block: Block) { //TODO Att, yep, important refactor
+        for (square in levelInfo.squares) {
+            if (blockX >= square.xTop && blockX <= square.xBot && blockY >= square.yTop && blockY <= square.yBot) {
+                var blockScore = calcBlockScore(block, square)
+                block.score += blockScore
+                levelInfo.score += blockScore
             }
         }
+    }
+
+    private fun calcBlockScore(block: Block, square: Square) : Int{
+        var ret = 0
+        when(square.element){
+            Elements.FOREST -> when(block.piece){
+                Elements.FIRE -> ret += 2
+                Elements.WATER -> ret -- //TODO If equal ++, remove those
+                Elements.FOREST -> ret ++
+            }
+            Elements.WATER  -> when(block.piece){
+                Elements.FIRE -> ret --
+                Elements.WATER -> ret ++
+                Elements.FOREST -> ret += 2
+            }
+            Elements.FIRE   -> when(block.piece){
+                Elements.FIRE -> ret ++
+                Elements.WATER -> ret += 2
+                Elements.FOREST -> ret --
+            }
+        }
+        return ret
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -131,9 +153,9 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
                         mShadowPaint
                     )
 
-                    if(levelConfiguration.blocks[i + j*6].piece != Elements.EMPTY) {
+                    if(levelInfo.blocks[i + j*6].piece != Elements.EMPTY) {
 
-                        mPiecePaint.color = levelConfiguration.blocks[i + j * 6].piece.intCode
+                        mPiecePaint.color = levelInfo.blocks[i + j * 6].piece.intCode
 
                         drawCircle(
                             i * blockSize.toFloat() + PIECE_SHADOW_DX + (blockSize - BLOCK_SPACING) / 2,

@@ -1,11 +1,13 @@
 package com.ivanloy.mentalblocks
 
-class LevelConfiguration(
+class LevelInfo(
     var squares : Array<Square> = arrayOf()
 ) {
-    var maxMoves : Int = 1
+    var maxMoves : Int = 5
+    var movesLeft = maxMoves
     var proportions : FloatArray = floatArrayOf(1f, 1f, 1f)
     var blocks : Array<Block> = Array(36) { Block() }
+    var score : Int = 0
     //TODO Refactor, UP is pieces, DOWN is colors, join both
     fun getBlockArray() : Array<Block>{
         var ret : Array<Block> = Array(36){ Block() }
