@@ -10,13 +10,13 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".LevelListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".LevelListActivity">
         </activity>
     </application>
 
