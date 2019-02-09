@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity"
+        tools:context=".LevelActivity"
         android:background="@drawable/background">
     <!--TODO Screen size, 18:9 -->
 
@@ -58,13 +58,7 @@
     <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
                                                 android:id="@+id/guideline4" app:layout_constraintGuide_begin="74dp"
                                                 android:orientation="horizontal"/>
-    <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp" app:srcCompat="@drawable/back_arrow"
-            android:id="@+id/imageView2" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"/>
+
     <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp" app:srcCompat="@drawable/hint"
@@ -190,5 +184,14 @@
             app:layout_constraintStart_toStartOf="@+id/tv_select_green"
             app:layout_constraintTop_toTopOf="@+id/tv_select_green"
             app:layout_constraintBottom_toBottomOf="@+id/tv_select_green"/>
+
+    <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/back_arrow"
+            android:id="@+id/btn_goBack" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

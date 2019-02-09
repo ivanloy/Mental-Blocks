@@ -8,8 +8,8 @@ enum class BlockColors(val intCode : Int) {
     C_2B(0xFF42A5F5.toInt()),
     C_2R(0xFFef5350.toInt()),
     C_2G(0xFF66BB6A.toInt()),
-    C_RB(0xFFAB47BC.toInt()),
-    C_GB(0xFF26C6DA.toInt()),
-    C_RG(0xFFFFEE58.toInt()),
+    C_RB(0xFFBA68C8.toInt()),
+    C_GB(0xFF00BCD4.toInt()),
+    C_RG(0xFFFFD54F.toInt()),
     C_RGB(0xFFFFFFFF.toInt()),
 }

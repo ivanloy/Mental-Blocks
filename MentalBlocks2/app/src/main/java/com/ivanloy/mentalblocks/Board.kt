@@ -108,17 +108,17 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     private fun calcBlockScore(block: Block, square: Square) : Int{
         var ret = 0
         when(square.element){
-            Elements.FOREST -> when(block.piece){
+            Elements.FOREST.id -> when(block.piece){
                 Elements.FIRE -> ret += 2
                 Elements.WATER -> ret -- //TODO If equal ++, remove those
                 Elements.FOREST -> ret ++
             }
-            Elements.WATER  -> when(block.piece){
+            Elements.WATER.id  -> when(block.piece){
                 Elements.FIRE -> ret --
                 Elements.WATER -> ret ++
                 Elements.FOREST -> ret += 2
             }
-            Elements.FIRE   -> when(block.piece){
+            Elements.FIRE.id   -> when(block.piece){
                 Elements.FIRE -> ret ++
                 Elements.WATER -> ret += 2
                 Elements.FOREST -> ret --
@@ -187,7 +187,17 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val blockX = Math.floor((event!!.x / blockSize).toDouble()).toInt() //TODO Putos casts raros
         val blockY = Math.floor((event!!.y / blockSize).toDouble()).toInt() //TODO Check if out of canvasito
-        handleClick(blockX, blockY)
+        val index = blockX + blockY*6
+
+        if(     blockColors[index] != BlockColors.EMPTY_BLOCK.intCode &&
+                (index < 6      || levelInfo.blocks[index - 6].piece == Elements.EMPTY) && //Up
+                (index > 29     || levelInfo.blocks[index + 6].piece == Elements.EMPTY) && //Down
+                (index % 6 == 0 || levelInfo.blocks[index - 1].piece == Elements.EMPTY) && //Right
+                (index % 6 == 5 || levelInfo.blocks[index + 1].piece == Elements.EMPTY)) { //Left
+
+            handleClick(blockX, blockY) //TODO Feo que te cagas, hardcoded nums
+
+        }
         return super.onTouchEvent(event)
     }
 
