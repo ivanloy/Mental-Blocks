@@ -12,6 +12,7 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
     private var listener : BoardListener = object : BoardListener{
         override fun onBlockClicked(levelInfo: LevelInfo) {}
+        override fun onLevelCompleted() {}
     }
 
     private val BLOCK_SPACING = 12
@@ -71,18 +72,61 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         setPieceType(blockX, blockY)
         updateScore(blockX, blockY)
         listener.onBlockClicked(levelInfo)
+        if(levelInfo.score == levelInfo.targetScore &&
+           levelInfo.movesLeft == 0 &&
+          (levelInfo.elementMovesLeft[0] == -1 ||
+                  (levelInfo.elementMovesLeft[0] == 0 && levelInfo.elementMovesLeft[1] == 0 && levelInfo.elementMovesLeft[2] == 0))){
+            listener.onLevelCompleted()
+        }
     }
 
     fun setPieceType(blockX : Int, blockY : Int){
         var block = levelInfo.blocks[blockX + blockY*6]
-        if(pieceSelected != Elements.EMPTY && levelInfo.movesLeft > 0 && block.piece == Elements.EMPTY) {
+        var selectedPieceMovesLeft = getSelectedPieceMovesLeft()
+
+        if(pieceSelected != Elements.EMPTY && selectedPieceMovesLeft > 0 && levelInfo.movesLeft > 0 && block.piece == Elements.EMPTY) {
             block.piece = pieceSelected
             levelInfo.movesLeft--
+            subSelectedPieceMovesLeft()
         }else if(pieceSelected != Elements.EMPTY && block.piece != Elements.EMPTY){
+
+            addMovesLeftToPieceRemoved(block)
             block.piece = Elements.EMPTY
             levelInfo.movesLeft++
         }
         invalidate()
+    }
+
+    fun getSelectedPieceMovesLeft() : Int{
+        var ret = 1
+        if(levelInfo.elementMovesLeft[0] != -1){
+            when(pieceSelected){
+                Elements.FIRE -> ret = levelInfo.elementMovesLeft[0]
+                Elements.FOREST -> ret = levelInfo.elementMovesLeft[1]
+                Elements.WATER -> ret = levelInfo.elementMovesLeft[2]
+            }
+        }
+        return ret
+    }
+
+    fun addMovesLeftToPieceRemoved(block: Block){
+        if(levelInfo.elementMovesLeft[0] != -1){
+            when(block.piece){
+                Elements.FIRE -> levelInfo.elementMovesLeft[0]++
+                Elements.FOREST -> levelInfo.elementMovesLeft[1]++
+                Elements.WATER -> levelInfo.elementMovesLeft[2]++
+            }
+        }
+    }
+
+    fun subSelectedPieceMovesLeft(){
+        if(levelInfo.elementMovesLeft[0] != -1){
+            when(pieceSelected){
+                Elements.FIRE -> levelInfo.elementMovesLeft[0]--
+                Elements.FOREST -> levelInfo.elementMovesLeft[1]--
+                Elements.WATER -> levelInfo.elementMovesLeft[2]--
+            }
+        }
     }
 
     fun updateScore(blockX: Int, blockY: Int){

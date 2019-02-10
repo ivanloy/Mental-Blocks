@@ -47,4 +47,20 @@ enum class LevelsData(val data : LevelInfo) { //TODO File
                               Square(0,2,5,2,Elements.FOREST.id)),
         6,2)),
 
+    LEVEL_10(LevelInfo(arrayOf(Square(2,0,3,5,Elements.FIRE.id),
+                               Square(0,2,5,3,Elements.WATER.id)),
+        10,0, intArrayOf(10, 0, 0))),
+
+    LEVEL_11(LevelInfo(arrayOf(Square(1,0,4,1,Elements.FIRE.id),
+                               Square(1,3,4,4,Elements.FOREST.id),
+                               Square(1,2,4,2,Elements.WATER.id),
+                               Square(2,1,3,3,Elements.WATER.id)),
+        6,9, intArrayOf(2, 2, 2))),
+
+    LEVEL_12(LevelInfo(arrayOf(Square(1,3,2,4,Elements.WATER.id),
+                               Square(2,2,3,3,Elements.WATER.id),
+                               Square(3,1,4,2,Elements.WATER.id),
+                               Square(4,2,5,3,Elements.WATER.id),
+                               Square(0,2,1,3,Elements.WATER.id)),
+        7,8, intArrayOf(1, 4, 2))),
 }

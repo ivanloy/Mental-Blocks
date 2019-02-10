@@ -1,5 +1,6 @@
 package com.ivanloy.mentalblocks
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,9 +8,13 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_level.*
 
 class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
+
+    private var levelConf = LevelInfo()
+    private var nLevel = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +28,19 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
         btn_select_green.setOnClickListener(this)
         btn_select_red.setOnClickListener(this)
         btn_goBack.setOnClickListener(this)
+        btn_hint.setOnClickListener(this)
 
+        levelConf = intent.getParcelableExtra<LevelInfo>("LevelInfo")
+        nLevel = intent.getIntExtra("nLevel", 0)
 
-        val intent = getIntent()
-        var levelConf = intent.getParcelableExtra<LevelInfo>("LevelInfo")
-
+        tv_nLevel.text = nLevel.toString()
         tv_score.text = TextUtil.fromHtml("<b><big>0</big></b> / <small>${levelConf.targetScore}</small>")
         tv_movesLeft.text = "${levelConf.targetMoves} moves"
+        if(levelConf.targetElementMoves[0] != -1) {
+            tv_select_red.text = levelConf.targetElementMoves[0].toString()
+            tv_select_green.text = levelConf.targetElementMoves[1].toString()
+            tv_select_blue.text = levelConf.targetElementMoves[2].toString()
+        }
 
         brd_blockBoard.setBoardListener(this) //TODO Builder?
         brd_blockBoard.setLevelConfiguration(levelConf)
@@ -39,6 +50,19 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
     override fun onBlockClicked(levelInfo: LevelInfo) {
         tv_score.text = TextUtil.fromHtml("<b><big>${levelInfo.score}</big></b> / <small>${levelInfo.targetScore}</small>")
         tv_movesLeft.text = "${levelInfo.movesLeft} moves"
+        if(levelInfo.targetElementMoves[0] != -1) {
+            tv_select_red.text = levelInfo.elementMovesLeft[0].toString()
+            tv_select_green.text = levelInfo.elementMovesLeft[1].toString()
+            tv_select_blue.text = levelInfo.elementMovesLeft[2].toString()
+        }
+    }
+
+    override fun onLevelCompleted() {
+        var resultIntent = Intent()
+        resultIntent.putExtra("completed", true)
+        resultIntent.putExtra("nLevelResponse", nLevel)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 
     override fun onClick(v: View?) {
@@ -65,9 +89,10 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
             }
 
             R.id.btn_goBack -> {
-                Log.d("Patata", "papa")
-                val intent = Intent(this, LevelListActivity::class.java)
-                startActivity(intent)
+                finish()
+            }
+            R.id.btn_hint -> {
+                Toast.makeText(this, "WIP :(", Toast.LENGTH_SHORT).show()
             }
 
         }

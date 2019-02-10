@@ -1,6 +1,7 @@
 package com.ivanloy.mentalblocks
 
 import android.content.Context
+import android.opengl.Visibility
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.level_preview.view.*
 
-class LevelAdapter(val items : ArrayList<Level>, val context: Context, val listener : LevelListListener)
+class LevelAdapter(var items : ArrayList<Level>, val context: Context, val listener : LevelListListener)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,9 +19,15 @@ class LevelAdapter(val items : ArrayList<Level>, val context: Context, val liste
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(items[position].unlocked) holder.image.setImageDrawable(items[position].drawable)
+        if(items[position].completed) holder.completed.visibility = View.VISIBLE
     }
 
     override fun getItemCount(): Int {return items.size}
+
+    fun setData(data : ArrayList<Level>){
+        this.items = data
+        notifyDataSetChanged()
+    }
 
 }
 
@@ -29,6 +36,7 @@ class ViewHolder (view: View, val listener: LevelListListener) :
     RecyclerView.ViewHolder(view), View.OnClickListener {
 
     var image: ImageView = view.findViewById(R.id.img_levelImage)
+    var completed : ImageView = view.findViewById(R.id.img_levelCompleted)
 
     init {
         view.setOnClickListener(this)

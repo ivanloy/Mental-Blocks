@@ -6,10 +6,12 @@ import android.os.Parcelable
 class LevelInfo(
     val squares : Array<Square> = arrayOf(),
     val targetMoves : Int = 0,
-    val targetScore : Int = 0
+    val targetScore : Int = 0,
+    val targetElementMoves : IntArray = intArrayOf(-1,-1,-1)
 ) : Parcelable {
 
     var movesLeft = targetMoves
+    var elementMovesLeft = targetElementMoves.clone()
     var proportions : FloatArray = floatArrayOf(1f, 1f, 1f)
     var blocks : Array<Block> = Array(36) { Block() }
     var score : Int = 0
@@ -17,9 +19,11 @@ class LevelInfo(
     constructor(parcel: Parcel) : this(
         parcel.createTypedArray(Square),
         parcel.readInt(),
-        parcel.readInt()
+        parcel.readInt(),
+        parcel.createIntArray()
     ) {
         movesLeft = parcel.readInt()
+        elementMovesLeft = parcel.createIntArray()
         proportions = parcel.createFloatArray()
         score = parcel.readInt()
     }
@@ -51,7 +55,9 @@ class LevelInfo(
         parcel.writeTypedArray(squares, flags)
         parcel.writeInt(targetMoves)
         parcel.writeInt(targetScore)
+        parcel.writeIntArray(targetElementMoves)
         parcel.writeInt(movesLeft)
+        parcel.writeIntArray(elementMovesLeft)
         parcel.writeFloatArray(proportions)
         parcel.writeInt(score)
     }

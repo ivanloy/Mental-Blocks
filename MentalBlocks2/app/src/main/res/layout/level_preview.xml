@@ -4,8 +4,7 @@
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="120dp"
                                                    android:layout_height="120dp"
-                                                   android:layout_margin="5dp"
-                                                   android:background="@color/darkGray">
+                                                   android:layout_margin="5dp">
 
     <ImageView
             android:layout_width="0dp"
@@ -13,6 +12,15 @@
             android:id="@+id/img_levelImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp" app:srcCompat="@drawable/level_completed"
+            android:id="@+id/img_levelCompleted"
+            android:visibility="invisible"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/img_levelImage" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 
