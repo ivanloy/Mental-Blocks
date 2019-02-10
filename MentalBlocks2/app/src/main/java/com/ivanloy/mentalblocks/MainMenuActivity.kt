@@ -25,10 +25,6 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                 val intent = Intent(this, LevelListActivity::class.java)
                 startActivity(intent)
             }
-            R.id.btn_donations -> {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=nachovanle@gmail.com&lc=US&item_name=YOUR+PURPOSE+HERE&no_note=0&cn=&curency_code=USD&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"))
-                startActivity(browserIntent)
-            }
             else -> {
                 Toast.makeText(this, "WIP :(", Toast.LENGTH_SHORT).show()
             }
