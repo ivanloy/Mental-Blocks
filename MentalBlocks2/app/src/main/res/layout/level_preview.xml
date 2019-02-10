@@ -15,8 +15,8 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp" app:srcCompat="@drawable/level_completed"
+            android:layout_width="30dp"
+            android:layout_height="30dp" app:srcCompat="@drawable/level_completed"
             android:id="@+id/img_levelCompleted"
             android:visibility="invisible"
             android:layout_marginTop="8dp"
