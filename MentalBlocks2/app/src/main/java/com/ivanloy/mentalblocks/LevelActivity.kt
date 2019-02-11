@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -15,6 +14,7 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
 
     private var levelConf = LevelInfo()
     private var nLevel = 0
+    private var resultIntent = Intent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,9 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
         btn_select_red.setOnClickListener(this)
         btn_goBack.setOnClickListener(this)
         btn_hint.setOnClickListener(this)
+        btn_nextBtn.setOnClickListener(this) //TODO Drawable with diff color when focused
+        btn_lvlBtn.setOnClickListener(this)
+        btn_restartBtn.setOnClickListener(this)
 
         levelConf = intent.getParcelableExtra<LevelInfo>("LevelInfo")
         nLevel = intent.getIntExtra("nLevel", 0)
@@ -58,11 +61,9 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
     }
 
     override fun onLevelCompleted() {
-        var resultIntent = Intent()
         resultIntent.putExtra("completed", true)
         resultIntent.putExtra("nLevelResponse", nLevel)
-        setResult(Activity.RESULT_OK, resultIntent)
-        finish()
+        popUpEndLvlWindow()
     }
 
     override fun onClick(v: View?) {
@@ -95,7 +96,27 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
                 Toast.makeText(this, "WIP :(", Toast.LENGTH_SHORT).show()
             }
 
+            R.id.btn_lvlBtn -> {
+                resultIntent.putExtra("btnPressed", EndLevelButtons.LEVELS_MENU.code)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
+            R.id.btn_restartBtn -> {
+                resultIntent.putExtra("btnPressed", EndLevelButtons.RESTART.code)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
+            R.id.btn_nextBtn -> {
+                resultIntent.putExtra("btnPressed", EndLevelButtons.NEXT_LVL.code)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
+
         }
+    }
+
+    fun popUpEndLvlWindow(){
+        endLvlGroup.visibility = View.VISIBLE
     }
 
 }

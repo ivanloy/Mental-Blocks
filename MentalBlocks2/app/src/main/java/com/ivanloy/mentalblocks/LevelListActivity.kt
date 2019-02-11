@@ -65,12 +65,7 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
     }
 
     override fun onLevelClicked(position: Int) {
-        if(levels[position].unlocked) {
-            val intent = Intent(this, LevelActivity::class.java)
-            intent.putExtra("LevelInfo", levels[position].levelInfo) //TODO Constants
-            intent.putExtra("nLevel", levels[position].nLevel) //TODO Constants
-            startActivityForResult(intent, 0) //TODO Constants
-        }
+        this.startLevel(position)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,6 +80,11 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
                         levels[nLevel + 1].unlocked = true
                     }
                     saveData()
+                    var buttonPressed = data!!.getIntExtra("btnPressed", EndLevelButtons.LEVELS_MENU.code) //TODO Use std kotlin lib funcs
+                    when(buttonPressed) {
+                        EndLevelButtons.RESTART.code -> startLevel(nLevel)
+                        EndLevelButtons.NEXT_LVL.code -> startLevel(nLevel + 1)
+                    }
                     adapter!!.setData(levels)
                 }
             }
@@ -102,6 +102,15 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
     override fun onDestroy() {
         Log.d("Patata", "onDestroy")
         super.onDestroy()
+    }
+
+    fun startLevel(nLevel : Int){
+        if(nLevel < levels.size && levels[nLevel].unlocked) {
+            val intent = Intent(this, LevelActivity::class.java)
+            intent.putExtra("LevelInfo", levels[nLevel].levelInfo) //TODO Constants
+            intent.putExtra("nLevel", levels[nLevel].nLevel) //TODO Constants
+            startActivityForResult(intent, 0) //TODO Constants
+        }
     }
 
     fun getNLevelsSolved() : Int{
