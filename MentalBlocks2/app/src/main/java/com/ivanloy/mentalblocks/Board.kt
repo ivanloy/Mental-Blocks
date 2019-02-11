@@ -15,11 +15,12 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         override fun onLevelCompleted() {}
     }
 
-    private val BLOCK_SPACING = 12
-    private val BLOCK_SHADOW_DY = 6
-    private val PIECE_SHADOW_DX = 7
-    private val PIECE_SHADOW_DY = 7
-    private val PIECE_SIZE_DIV = 3.5
+    private val BLOCK_SPACING = 10f
+    private val BLOCK_SHADOW_DY = 6f
+    private val BLOCK_ROUND_RADIUS = 18f
+    private val PIECE_SHADOW_DX = 7f
+    private val PIECE_SHADOW_DY = 7f
+    private val PIECE_SIZE_DIV = 3.5f
     private val PIECE_STROKE_WIDTH = 8f
 
     var blockSize = 0
@@ -182,21 +183,26 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
             for (i in 0..5){
                 for(j in 0..5){
                     mBlockPaint.color = blockColors[i + j*6] //TODO Hardcoded
-                    drawRect(
-                        i * (blockSize).toFloat(),
-                        j * (blockSize).toFloat(),
-                        (i + 1) * (blockSize).toFloat() - BLOCK_SPACING,
-                        (j + 1) * (blockSize).toFloat() - BLOCK_SPACING,
-                        mBlockPaint
-                    )
-                    drawRect(
-                        i * (blockSize).toFloat(),
-                        (j + 1) * (blockSize).toFloat() - BLOCK_SPACING,
-                        (i + 1) * (blockSize).toFloat() - BLOCK_SPACING,
-                        (j + 1) * (blockSize).toFloat() - BLOCK_SPACING + BLOCK_SHADOW_DY,
-                        mShadowPaint
-                    )
-
+                    if(mBlockPaint.color != BlockColors.EMPTY_BLOCK.intCode) {
+                        drawRoundRect(
+                            i * (blockSize).toFloat(),
+                            j * (blockSize).toFloat(),
+                            (i + 1) * (blockSize).toFloat() - BLOCK_SPACING,
+                            (j + 1) * (blockSize).toFloat() - BLOCK_SPACING + BLOCK_SHADOW_DY,
+                            BLOCK_ROUND_RADIUS,
+                            BLOCK_ROUND_RADIUS,
+                            mShadowPaint
+                        )
+                        drawRoundRect(
+                            i * (blockSize).toFloat(),
+                            j * (blockSize).toFloat(),
+                            (i + 1) * (blockSize).toFloat() - BLOCK_SPACING,
+                            (j + 1) * (blockSize).toFloat() - BLOCK_SPACING,
+                            BLOCK_ROUND_RADIUS,
+                            BLOCK_ROUND_RADIUS,
+                            mBlockPaint
+                        )
+                    }
                     if(levelInfo.blocks[i + j*6].piece != Elements.EMPTY) {
 
                         mPiecePaint.color = levelInfo.blocks[i + j * 6].piece.intCode

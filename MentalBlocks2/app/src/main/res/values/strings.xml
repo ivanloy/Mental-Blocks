@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mental Blocks</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="moves">moves</string>
 </resources>
