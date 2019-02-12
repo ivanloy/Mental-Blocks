@@ -7,6 +7,7 @@ class LevelInfo(
     val squares : Array<Square> = arrayOf(),
     val targetMoves : Int = 0,
     val targetScore : Int = 0,
+    val hintFixedPiece: FixedPiece? = null,
     val targetElementMoves : IntArray = intArrayOf(-1,-1,-1)
 ) : Parcelable {
 
@@ -20,6 +21,7 @@ class LevelInfo(
         parcel.createTypedArray(Square),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readParcelable(FixedPiece::class.java.classLoader),
         parcel.createIntArray()
     ) {
         movesLeft = parcel.readInt()
@@ -55,6 +57,7 @@ class LevelInfo(
         parcel.writeTypedArray(squares, flags)
         parcel.writeInt(targetMoves)
         parcel.writeInt(targetScore)
+        parcel.writeParcelable(hintFixedPiece, flags)
         parcel.writeIntArray(targetElementMoves)
         parcel.writeInt(movesLeft)
         parcel.writeIntArray(elementMovesLeft)

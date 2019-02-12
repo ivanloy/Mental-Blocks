@@ -60,6 +60,16 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
         }
     }
 
+    override fun onFixedPiecePut(levelInfo: LevelInfo) {
+        tv_score.text = TextUtil.fromHtml("<b><big>${levelInfo.score}</big></b> / <small>${levelInfo.targetScore}</small>")
+        tv_movesLeft.text = "${levelInfo.movesLeft} moves"
+        if(levelInfo.targetElementMoves[0] != -1) { //TODO Method
+            tv_select_red.text = levelInfo.elementMovesLeft[0].toString()
+            tv_select_green.text = levelInfo.elementMovesLeft[1].toString()
+            tv_select_blue.text = levelInfo.elementMovesLeft[2].toString()
+        }
+    }
+
     override fun onLevelCompleted() {
         resultIntent.putExtra("completed", true)
         resultIntent.putExtra("nLevelResponse", nLevel)
@@ -93,7 +103,7 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
                 finish()
             }
             R.id.btn_hint -> {
-                Toast.makeText(this, "WIP :(", Toast.LENGTH_SHORT).show()
+                brd_blockBoard.putHintFixedPiece()
             }
 
             R.id.btn_lvlBtn -> {

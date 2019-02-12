@@ -12,6 +12,7 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
     private var listener : BoardListener = object : BoardListener{
         override fun onBlockClicked(levelInfo: LevelInfo) {}
+        override fun onFixedPiecePut(levelInfo: LevelInfo) {}
         override fun onLevelCompleted() {}
     }
 
@@ -39,6 +40,12 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
     private var mPiecePaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = BlockColors.BLUE.intCode //TODO colors
+    }
+
+    private var mFixedPiecePaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = 0xFFFAFAFA.toInt() //TODO colors
+        strokeWidth = PIECE_STROKE_WIDTH
+        style = Paint.Style.STROKE
     }
 
     private var mPieceBorderPaint : Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -73,26 +80,20 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         setPieceType(blockX, blockY)
         updateScore(blockX, blockY)
         listener.onBlockClicked(levelInfo)
-        if(levelInfo.score == levelInfo.targetScore &&
-           levelInfo.movesLeft == 0 &&
-          (levelInfo.elementMovesLeft[0] == -1 ||
-                  (levelInfo.elementMovesLeft[0] == 0 && levelInfo.elementMovesLeft[1] == 0 && levelInfo.elementMovesLeft[2] == 0))){
-            listener.onLevelCompleted()
-        }
     }
 
     fun setPieceType(blockX : Int, blockY : Int){
         var block = levelInfo.blocks[blockX + blockY*6]
         var selectedPieceMovesLeft = getSelectedPieceMovesLeft()
 
-        if(pieceSelected != Elements.EMPTY && selectedPieceMovesLeft > 0 && levelInfo.movesLeft > 0 && block.piece == Elements.EMPTY) {
-            block.piece = pieceSelected
+        if(pieceSelected != Elements.EMPTY && selectedPieceMovesLeft > 0 && levelInfo.movesLeft > 0 && block.piece == Elements.EMPTY.intCode) {
+            block.piece = pieceSelected.intCode
             levelInfo.movesLeft--
             subSelectedPieceMovesLeft()
-        }else if(pieceSelected != Elements.EMPTY && block.piece != Elements.EMPTY){
+        }else if(pieceSelected != Elements.EMPTY && block.piece != Elements.EMPTY.intCode && !block.fixed){
 
             addMovesLeftToPieceRemoved(block)
-            block.piece = Elements.EMPTY
+            block.piece = Elements.EMPTY.intCode
             levelInfo.movesLeft++
         }
         invalidate()
@@ -113,9 +114,9 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
     fun addMovesLeftToPieceRemoved(block: Block){
         if(levelInfo.elementMovesLeft[0] != -1){
             when(block.piece){
-                Elements.FIRE -> levelInfo.elementMovesLeft[0]++
-                Elements.FOREST -> levelInfo.elementMovesLeft[1]++
-                Elements.WATER -> levelInfo.elementMovesLeft[2]++
+                Elements.FIRE.intCode -> levelInfo.elementMovesLeft[0]++
+                Elements.FOREST.intCode -> levelInfo.elementMovesLeft[1]++
+                Elements.WATER.intCode -> levelInfo.elementMovesLeft[2]++
             }
         }
     }
@@ -130,14 +131,32 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         }
     }
 
+    fun subElementPieceMovesLeft(element: Int){
+        if(levelInfo.elementMovesLeft[0] != -1){
+            when(element){
+                Elements.FIRE.intCode -> levelInfo.elementMovesLeft[0]--
+                Elements.FOREST.intCode -> levelInfo.elementMovesLeft[1]--
+                Elements.WATER.intCode -> levelInfo.elementMovesLeft[2]--
+            }
+        }
+    }
+
     fun updateScore(blockX: Int, blockY: Int){
         var block = levelInfo.blocks[blockX + blockY*6]
-        if(block.piece != Elements.EMPTY) {
+        if(block.piece != Elements.EMPTY.intCode) {
             addScore(blockX, blockY, block)
         }else {
             levelInfo.score -= block.score
             block.score = 0 //TODO Att in block obj
         }
+
+        if(levelInfo.score == levelInfo.targetScore &&
+            levelInfo.movesLeft == 0 && //TODO Desfear
+            (levelInfo.elementMovesLeft[0] == -1 ||
+                    (levelInfo.elementMovesLeft[0] == 0 && levelInfo.elementMovesLeft[1] == 0 && levelInfo.elementMovesLeft[2] == 0))){
+            listener.onLevelCompleted()
+        }
+
     }
 
     private fun addScore(blockX: Int, blockY: Int , block: Block) { //TODO Att, yep, important refactor
@@ -154,22 +173,69 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         var ret = 0
         when(square.element){
             Elements.FOREST.id -> when(block.piece){
-                Elements.FIRE -> ret += 2
-                Elements.WATER -> ret -- //TODO If equal ++, remove those
-                Elements.FOREST -> ret ++
+                Elements.FIRE.intCode -> ret += 2
+                Elements.WATER.intCode -> ret -- //TODO If equal ++, remove those
+                Elements.FOREST.intCode -> ret ++
             }
             Elements.WATER.id  -> when(block.piece){
-                Elements.FIRE -> ret --
-                Elements.WATER -> ret ++
-                Elements.FOREST -> ret += 2
+                Elements.FIRE.intCode -> ret --
+                Elements.WATER.intCode -> ret ++
+                Elements.FOREST.intCode -> ret += 2
             }
             Elements.FIRE.id   -> when(block.piece){
-                Elements.FIRE -> ret ++
-                Elements.WATER -> ret += 2
-                Elements.FOREST -> ret --
+                Elements.FIRE.intCode -> ret ++
+                Elements.WATER.intCode -> ret += 2
+                Elements.FOREST.intCode -> ret --
             }
         }
         return ret
+    }
+
+    fun paintPiece(canvas: Canvas, xx : Float, yy : Float, borderPaint : Paint){
+        with(canvas) {
+            drawCircle(
+                xx + PIECE_SHADOW_DX,
+                yy + PIECE_SHADOW_DY,
+                blockSize / PIECE_SIZE_DIV.toFloat(),
+                mShadowPaint
+            )
+
+            drawCircle(
+                xx,
+                yy,
+                blockSize / PIECE_SIZE_DIV.toFloat(),
+                mPiecePaint
+            )
+
+            drawCircle(
+                xx, //TODO APELO QUE FEO
+                yy,
+                blockSize / PIECE_SIZE_DIV.toFloat(),
+                borderPaint
+            )
+        }
+    }
+
+    fun putHintFixedPiece(){
+        var blockX = levelInfo.hintFixedPiece!!.xx //TODO nullcheck
+        var blockY = levelInfo.hintFixedPiece!!.yy
+        var element = levelInfo.hintFixedPiece!!.element
+        var block = levelInfo.blocks[blockX + blockY*6]
+
+        if(block.piece == Elements.EMPTY.intCode){
+            levelInfo.movesLeft--
+        }else{
+            addMovesLeftToPieceRemoved(block)
+        }
+        subElementPieceMovesLeft(element)
+
+        block.piece = element
+        block.fixed = true
+
+        updateScore(blockX, blockY)
+        listener.onFixedPiecePut(levelInfo)
+        invalidate()
+
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -203,30 +269,20 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
                             mBlockPaint
                         )
                     }
-                    if(levelInfo.blocks[i + j*6].piece != Elements.EMPTY) {
+                    if(levelInfo.blocks[i + j*6].piece != Elements.EMPTY.intCode) {
 
-                        mPiecePaint.color = levelInfo.blocks[i + j * 6].piece.intCode
+                        mPiecePaint.color = levelInfo.blocks[i + j*6].piece
 
-                        drawCircle(
-                            i * blockSize.toFloat() + PIECE_SHADOW_DX + (blockSize - BLOCK_SPACING) / 2,
-                            j * blockSize.toFloat() + PIECE_SHADOW_DY + (blockSize - BLOCK_SPACING) / 2,
-                            blockSize / PIECE_SIZE_DIV.toFloat(),
-                            mShadowPaint
-                        )
+                        var paint = mPieceBorderPaint
+                        if(levelInfo.blocks[i + j*6].fixed){
+                            paint = mFixedPiecePaint
+                        }
 
-                        drawCircle(
+                        paintPiece(this,
                             i * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2,
                             j * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2,
-                            blockSize / PIECE_SIZE_DIV.toFloat(),
-                            mPiecePaint
-                        )
+                            paint)
 
-                        drawCircle(
-                            i * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2, //TODO APELO QUE FEO
-                            j * blockSize.toFloat() + (blockSize - BLOCK_SPACING) / 2,
-                            blockSize / PIECE_SIZE_DIV.toFloat(),
-                            mPieceBorderPaint
-                        )
                     }
                 }
             }
@@ -240,10 +296,10 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         val index = blockX + blockY*6
 
         if(     blockColors[index] != BlockColors.EMPTY_BLOCK.intCode &&
-                (index < 6      || levelInfo.blocks[index - 6].piece == Elements.EMPTY) && //Up
-                (index > 29     || levelInfo.blocks[index + 6].piece == Elements.EMPTY) && //Down
-                (index % 6 == 0 || levelInfo.blocks[index - 1].piece == Elements.EMPTY) && //Right
-                (index % 6 == 5 || levelInfo.blocks[index + 1].piece == Elements.EMPTY)) { //Left
+                (index < 6      || levelInfo.blocks[index - 6].piece == Elements.EMPTY.intCode) && //Up
+                (index > 29     || levelInfo.blocks[index + 6].piece == Elements.EMPTY.intCode) && //Down
+                (index % 6 == 0 || levelInfo.blocks[index - 1].piece == Elements.EMPTY.intCode) && //Right
+                (index % 6 == 5 || levelInfo.blocks[index + 1].piece == Elements.EMPTY.intCode)) { //Left
 
             handleClick(blockX, blockY) //TODO Feo que te cagas, hardcoded nums
 

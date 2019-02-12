@@ -22,7 +22,6 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
     private var levels = ArrayList<Level>()
     private var adapter : LevelAdapter? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -113,7 +112,8 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
         }
     }
 
-    fun getNLevelsSolved() : Int{
+
+    private fun getNLevelsSolved() : Int{
         var ret = 0
         for(lev in levels){
             if(lev.completed) ret++

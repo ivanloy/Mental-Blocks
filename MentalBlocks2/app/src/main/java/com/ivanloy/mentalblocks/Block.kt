@@ -5,7 +5,8 @@ class Block(
 ){
 
     var points : Int = 0
-    var piece : Elements = Elements.EMPTY
+    var piece : Int = Elements.EMPTY.intCode //TODO AHHHH; BUSCAR FORMA CON ENUM, CONIO
+    var fixed : Boolean = false
     var score : Int = 0
 
     fun getColor() : Int {
