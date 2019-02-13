@@ -78,8 +78,10 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
 
     fun handleClick(blockX : Int, blockY : Int){
         setPieceType(blockX, blockY)
-        updateScore(blockX, blockY)
-        listener.onBlockClicked(levelInfo)
+        if(!levelInfo.blocks[blockX + blockY*6].fixed) {
+            updateScore(blockX, blockY)
+            listener.onBlockClicked(levelInfo)
+        }
     }
 
     fun setPieceType(blockX : Int, blockY : Int){
@@ -214,28 +216,6 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
                 borderPaint
             )
         }
-    }
-
-    fun putHintFixedPiece(){
-        var blockX = levelInfo.hintFixedPiece!!.xx //TODO nullcheck
-        var blockY = levelInfo.hintFixedPiece!!.yy
-        var element = levelInfo.hintFixedPiece!!.element
-        var block = levelInfo.blocks[blockX + blockY*6]
-
-        if(block.piece == Elements.EMPTY.intCode){
-            levelInfo.movesLeft--
-        }else{
-            addMovesLeftToPieceRemoved(block)
-        }
-        subElementPieceMovesLeft(element)
-
-        block.piece = element
-        block.fixed = true
-
-        updateScore(blockX, blockY)
-        listener.onFixedPiecePut(levelInfo)
-        invalidate()
-
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

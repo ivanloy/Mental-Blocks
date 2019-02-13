@@ -103,7 +103,9 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
                 finish()
             }
             R.id.btn_hint -> {
-                brd_blockBoard.putHintFixedPiece()
+                resultIntent.putExtra("btnPressed", EndLevelButtons.RESTART.code)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
             }
 
             R.id.btn_lvlBtn -> {
