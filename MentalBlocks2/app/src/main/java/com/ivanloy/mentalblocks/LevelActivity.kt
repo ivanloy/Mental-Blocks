@@ -102,10 +102,15 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
             R.id.btn_goBack -> {
                 finish()
             }
-            R.id.btn_hint -> {
-                resultIntent.putExtra("btnPressed", EndLevelButtons.RESTART.code)
-                setResult(Activity.RESULT_OK, resultIntent)
-                finish()
+            R.id.btn_hint -> { //TODO Restart wey,m juntate
+                brd_blockBoard.restartLevel()
+                tv_score.text = TextUtil.fromHtml("<b><big>0</big></b> / <small>${levelConf.targetScore}</small>")
+                tv_movesLeft.text = "${levelConf.targetMoves} moves"
+                if(levelConf.targetElementMoves[0] != -1) {
+                    tv_select_red.text = levelConf.targetElementMoves[0].toString()
+                    tv_select_green.text = levelConf.targetElementMoves[1].toString()
+                    tv_select_blue.text = levelConf.targetElementMoves[2].toString()
+                }
             }
 
             R.id.btn_lvlBtn -> {
@@ -114,9 +119,14 @@ class LevelActivity : AppCompatActivity(), BoardListener, View.OnClickListener{
                 finish()
             }
             R.id.btn_restartBtn -> {
-                resultIntent.putExtra("btnPressed", EndLevelButtons.RESTART.code)
-                setResult(Activity.RESULT_OK, resultIntent)
-                finish()
+                brd_blockBoard.restartLevel()
+                tv_score.text = TextUtil.fromHtml("<b><big>0</big></b> / <small>${levelConf.targetScore}</small>")
+                tv_movesLeft.text = "${levelConf.targetMoves} moves"
+                if(levelConf.targetElementMoves[0] != -1) {
+                    tv_select_red.text = levelConf.targetElementMoves[0].toString()
+                    tv_select_green.text = levelConf.targetElementMoves[1].toString()
+                    tv_select_blue.text = levelConf.targetElementMoves[2].toString()
+                }//TODO METHOD
             }
             R.id.btn_nextBtn -> {
                 resultIntent.putExtra("btnPressed", EndLevelButtons.NEXT_LVL.code)

@@ -3,9 +3,11 @@ package com.ivanloy.mentalblocks
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Vibrator
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat.getSystemService
 
 
 class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
@@ -218,6 +220,14 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         }
     }
 
+    fun restartLevel(){
+        for(block in levelInfo.blocks){
+            if(!block.fixed) block.piece = Elements.EMPTY.intCode
+        }
+        levelInfo.reset()
+        invalidate()
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         blockSize = w/6
         super.onSizeChanged(w, h, oldw, oldh)
@@ -275,13 +285,19 @@ class Board(context : Context, attrs : AttributeSet?) : View(context, attrs){
         val blockY = Math.floor((event!!.y / blockSize).toDouble()).toInt() //TODO Check if out of canvasito
         val index = blockX + blockY*6
 
-        if(     blockColors[index] != BlockColors.EMPTY_BLOCK.intCode &&
-                (index < 6      || levelInfo.blocks[index - 6].piece == Elements.EMPTY.intCode) && //Up
+        if(blockColors[index] != BlockColors.EMPTY_BLOCK.intCode){ //TODO Check fixed piece here
+
+            if((index < 6      || levelInfo.blocks[index - 6].piece == Elements.EMPTY.intCode) && //Up
                 (index > 29     || levelInfo.blocks[index + 6].piece == Elements.EMPTY.intCode) && //Down
                 (index % 6 == 0 || levelInfo.blocks[index - 1].piece == Elements.EMPTY.intCode) && //Right
                 (index % 6 == 5 || levelInfo.blocks[index + 1].piece == Elements.EMPTY.intCode)) { //Left
 
-            handleClick(blockX, blockY) //TODO Feo que te cagas, hardcoded nums
+                handleClick(blockX, blockY) //TODO Feo que te cagas, hardcoded nums
+
+            }else{
+                val vibratorService = getSystemService(context, Vibrator::class.java) as Vibrator
+                vibratorService.vibrate(200)
+            }
 
         }
         return super.onTouchEvent(event)

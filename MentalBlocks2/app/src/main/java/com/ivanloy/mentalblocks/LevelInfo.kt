@@ -28,6 +28,12 @@ class LevelInfo(
         score = parcel.readInt()
     }
 
+    fun reset(){
+        score = 0
+        movesLeft = targetMoves
+        elementMovesLeft = targetElementMoves.clone()
+    }
+
     //TODO Refactor, UP is pieces, DOWN is colors, join both
     fun getBlockArray() : Array<Block>{
         var ret : Array<Block> = Array(36){ Block() }
