@@ -126,7 +126,7 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
         if(data != null) {
             var parsedData = data.split(" ")
             if (parsedData.size > 0) {
-                for (i in 0..11) { //TODO Hardcoded
+                for (i in 0..levels.size) { //TODO Hardcoded
                     var line = parsedData[i].split(",")
                     levels[i].unlocked = line[0].toBoolean()
                     levels[i].completed = line[1].toBoolean()
