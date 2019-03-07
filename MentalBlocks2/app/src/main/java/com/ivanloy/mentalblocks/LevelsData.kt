@@ -67,7 +67,7 @@ enum class LevelsData(val data : LevelInfo) { //TODO File
     LEVEL_13(LevelInfo(arrayOf(Square(2,0,3,5,Elements.FIRE.id),
                                 Square(0,2,5,3,Elements.FOREST.id),
                                 Square(0,3,5,4,Elements.WATER.id)),
-        12,10, intArrayOf(4, 2, 3))),
+        9,10, intArrayOf(4, 2, 3))),
 
     LEVEL_14(LevelInfo(arrayOf(Square(0,3,1,4,Elements.WATER.id),
                                 Square(4,1,5,2,Elements.WATER.id),
