@@ -1,6 +1,7 @@
 package com.ivanloy.mentalblocks
 
 enum class BlockColors(val intCode : Int) {
+    DARK_GRAY(0xFF37474F.toInt()),
     EMPTY_BLOCK(0xFFE0E0E0.toInt()),
     RED(0xFFef9a9a.toInt()),
     GREEN(0xFFA5D6A7.toInt()),

@@ -18,8 +18,10 @@ class LevelAdapter(var items : ArrayList<Level>, val context: Context, val liste
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(items[position].unlocked) holder.image.setImageDrawable(items[position].drawable)
-        if(items[position].completed) holder.completed.visibility = View.VISIBLE
+        holder.nLevel.text = items[position].nLevel.toString()
+        if(items[position].completed)     holder.externalColor.setBackgroundColor(BlockColors.C_2G.intCode)
+        else if(items[position].unlocked) holder.externalColor.setBackgroundColor(BlockColors.DARK_GRAY.intCode)
+        else                              holder.externalColor.setBackgroundColor(BlockColors.EMPTY_BLOCK.intCode)
     }
 
     override fun getItemCount(): Int {return items.size}
@@ -35,8 +37,8 @@ class LevelAdapter(var items : ArrayList<Level>, val context: Context, val liste
 class ViewHolder (view: View, val listener: LevelListListener) :
     RecyclerView.ViewHolder(view), View.OnClickListener {
 
-    var image: ImageView = view.findViewById(R.id.img_levelImage)
-    var completed : ImageView = view.findViewById(R.id.img_levelCompleted)
+    var externalColor: View = view.findViewById(R.id.vw_external)
+    var nLevel : TextView = view.findViewById(R.id.tv_nLevelCard)
 
     init {
         view.setOnClickListener(this)

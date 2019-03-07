@@ -11,6 +11,7 @@
     <color name="coverWhiteAlpha">#68FFFFFF</color>
     <color name="invisible">#00FFFFFF</color>
     <color name="lightGray">#EEEEEE</color>
+    <color name="lightestGray">#F5F5F5</color>
 
     <color name="emptyBlock">#BDBDBD</color>
     <color name="blue">#90CAF9</color>

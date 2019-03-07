@@ -33,28 +33,16 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
 
         btn_goBackToMain.setOnClickListener(this)
 
-        levels = ArrayList<Level>()
+        var levelPack = LevelPack(LevelPacksData.TUTORIAL)
+        levels = levelPack.levels
 
-        levels.add(Level(1, LevelsData.LEVEL_1.data, getDrawable(R.drawable.level1), true))
-        levels.add(Level(2, LevelsData.LEVEL_2.data, getDrawable(R.drawable.level2), false))
-        levels.add(Level(3, LevelsData.LEVEL_3.data, getDrawable(R.drawable.level3), false))
-        levels.add(Level(4, LevelsData.LEVEL_4.data, getDrawable(R.drawable.level4), false))
-        levels.add(Level(5, LevelsData.LEVEL_5.data, getDrawable(R.drawable.level5), false))
-        levels.add(Level(6, LevelsData.LEVEL_6.data, getDrawable(R.drawable.level6), false))
-        levels.add(Level(7, LevelsData.LEVEL_7.data, getDrawable(R.drawable.level7), false))
-        levels.add(Level(8, LevelsData.LEVEL_8.data, getDrawable(R.drawable.level8), false))
-        levels.add(Level(9, LevelsData.LEVEL_9.data, getDrawable(R.drawable.level9), false))
-        levels.add(Level(10, LevelsData.LEVEL_10.data, getDrawable(R.drawable.level10), false))
-        levels.add(Level(11, LevelsData.LEVEL_11.data, getDrawable(R.drawable.level11), false))
-        levels.add(Level(12, LevelsData.LEVEL_12.data, getDrawable(R.drawable.level12), false))
-
-        loadData()
+        //loadData()
 
         tv_puzzlesSolved.text = TextUtil.fromHtml("<b><big>${getNLevelsSolved()}</big></b> / <small>12</small>")
 
         rv_levelList.layoutManager = GridLayoutManager(
             this,
-            3,
+            5,
             RecyclerView.VERTICAL,
             false
         )

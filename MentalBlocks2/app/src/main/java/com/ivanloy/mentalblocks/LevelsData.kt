@@ -58,9 +58,27 @@ enum class LevelsData(val data : LevelInfo) { //TODO File
         6,9, intArrayOf(2, 2, 2))),
 
     LEVEL_12(LevelInfo(arrayOf(Square(1,3,2,4,Elements.WATER.id),
-                               Square(2,2,3,3,Elements.WATER.id),
-                               Square(3,1,4,2,Elements.WATER.id),
-                               Square(4,2,5,3,Elements.WATER.id),
-                               Square(0,2,1,3,Elements.WATER.id)),
+                                Square(2,2,3,3,Elements.WATER.id),
+                                Square(3,1,4,2,Elements.WATER.id),
+                                Square(4,2,5,3,Elements.WATER.id),
+                                Square(0,2,1,3,Elements.WATER.id)),
         7,8, intArrayOf(1, 4, 2))),
+
+    LEVEL_13(LevelInfo(arrayOf(Square(2,0,3,5,Elements.FIRE.id),
+                                Square(0,2,5,3,Elements.FOREST.id),
+                                Square(0,3,5,4,Elements.WATER.id)),
+        12,10, intArrayOf(4, 2, 3))),
+
+    LEVEL_14(LevelInfo(arrayOf(Square(0,3,1,4,Elements.WATER.id),
+                                Square(4,1,5,2,Elements.WATER.id),
+                                Square(2,2,3,3,Elements.FIRE.id),
+                                Square(1,1,2,2,Elements.FOREST.id),
+                                Square(3,3,4,4,Elements.FOREST.id)),
+        8,7, intArrayOf(4, 0, 4))),
+
+    LEVEL_15(LevelInfo(arrayOf(Square(1,1,4,2,Elements.WATER.id),
+                                Square(1,4,4,4,Elements.FIRE.id),
+                                Square(2,2,3,3,Elements.FOREST.id)),
+        6,0, intArrayOf(2, 2, 2))),
+
 }
