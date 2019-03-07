@@ -36,7 +36,7 @@ class LevelListActivity : AppCompatActivity(), LevelListListener, View.OnClickLi
         var levelPack = LevelPack(LevelPacksData.TUTORIAL)
         levels = levelPack.levels
 
-        //loadData()
+        loadData()
 
         tv_puzzlesSolved.text = TextUtil.fromHtml("<b><big>${getNLevelsSolved()}</big></b> / <small>12</small>")
 

@@ -10,7 +10,7 @@ data class LevelPack(val levelPack : LevelPacksData) {
         val initLevel = levelPack.initLevel
         levels.add(Level(initLevel, levelData[0].data, true))
         for(i in 1..levelData.size - 1){
-            levels.add(Level(initLevel + i, levelData[i].data, true))
+            levels.add(Level(initLevel + i, levelData[i].data))
         }
     }
 

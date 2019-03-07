@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background"
+        android:id="@+id/cl_mainMenuConstraintLayout"
         tools:context=".MainMenuActivity">
 
 
@@ -15,30 +16,43 @@
             android:id="@+id/imageView" android:layout_marginTop="32dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
-    <ImageView
-            android:layout_width="336dp"
-            app:srcCompat="@drawable/levels"
-            android:id="@+id/btn_levels"
-            android:clickable="true"
-            android:layout_height="70dp"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintBottom_toTopOf="@+id/btn_donations"
-            app:layout_constraintVertical_chainStyle="packed" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
-    <ImageView
-            android:layout_width="336dp"
-            android:layout_height="70dp" app:srcCompat="@drawable/donations"
-            android:id="@+id/btn_donations"
-            app:layout_constraintTop_toBottomOf="@+id/btn_levels"
-            app:layout_constraintBottom_toTopOf="@+id/btn_credits" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
-    <ImageView
-            android:layout_width="336dp"
-            android:layout_height="67dp" app:srcCompat="@drawable/credits"
-            android:id="@+id/btn_credits"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/btn_donations"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+
+    <View android:layout_width="0dp" android:layout_height="0dp"
+          android:layout_marginTop="16dp"
+          android:clickable="true"
+          android:focusable="true"
+          app:layout_constraintHeight_max="220dp"
+          android:background="@color/darkGray"
+          app:layout_constraintTop_toBottomOf="@+id/imageView" android:layout_marginBottom="16dp"
+          app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+          android:layout_marginEnd="16dp" app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintDimensionRatio="V,1:1"
+          android:layout_marginStart="16dp" android:id="@+id/btn_levels"/>
+
+    <View android:layout_width="0dp" android:layout_height="0dp"
+          android:background="@color/lightestGray"
+          app:layout_constraintDimensionRatio="V,1:1"
+          app:layout_constraintTop_toTopOf="@+id/btn_levels" app:layout_constraintBottom_toBottomOf="@+id/btn_levels"
+          app:layout_constraintEnd_toEndOf="@+id/btn_levels" app:layout_constraintStart_toStartOf="@+id/btn_levels"
+          android:layout_marginTop="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+          android:layout_marginBottom="8dp" android:id="@+id/interior"/>
+
+    <View android:layout_width="0dp" android:layout_height="0dp"
+          android:background="@color/red"
+          app:layout_constraintBottom_toBottomOf="@+id/interior" app:layout_constraintStart_toStartOf="@+id/interior"
+          app:layout_constraintEnd_toEndOf="@+id/interior" android:id="@+id/vw_redPercentage"
+          app:layout_constraintDimensionRatio="w,1:2"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play!"
+            android:textSize="50dp"
+            android:textStyle="bold" android:textColor="@color/darkGray"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/interior" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/vw_redPercentage"
+            app:layout_constraintStart_toStartOf="@+id/interior"
+            app:layout_constraintEnd_toEndOf="@+id/interior" android:id="@+id/txt_nLevelMainMenu"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
